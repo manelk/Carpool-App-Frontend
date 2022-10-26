@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
+// import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
 import 'package:carpoolapp/screens/dialog_screen.dart';
 import 'package:carpoolapp/screens/share_ride.dart';
+
+import 'package:carpoolapp/apis/car_api.dart';
 
 void main() {
   runApp(AddCarScreen());
@@ -17,22 +19,94 @@ class AddCarScreen extends StatefulWidget {
 }
 
 class _AddCarScreenState extends State<AddCarScreen> {
-  String selectedValue = "USA";
+  String selectedValue = "Other";
+  String selectedValueManufacturer = "Ford";
+  String selectedValueEnergyType = "Electric";
+  String selectedValueColor = "Black";
 
   String model = "";
   String brand = "";
   String color = "";
   String energy_type = "";
-  var CarManufacturerList;
-  var tt = ['hhhh', 'ggggg', 'gggg'];
-  List<DropdownMenuItem<String>> get dropdownItems {
-    // CarManufacturerList = getManufacturer() as List;
-    // print(CarManufacturerList);
+
+  List<DropdownMenuItem<String>> get dropdownItemsCarManufacturer {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("USA"), value: "USA"),
-      DropdownMenuItem(child: Text("Canada"), value: "Canada"),
-      DropdownMenuItem(child: Text("Brazil"), value: "Brazil"),
-      DropdownMenuItem(child: Text("England"), value: "England"),
+      DropdownMenuItem(child: Text("Chrysler"), value: "Chrysler"),
+      DropdownMenuItem(child: Text("Honda"), value: "Honda"),
+      DropdownMenuItem(child: Text("Mercedes-benz"), value: "Mercedes-benz"),
+      DropdownMenuItem(child: Text("Ford"), value: "Ford"),
+      DropdownMenuItem(child: Text("gmc"), value: "gmc"),
+      DropdownMenuItem(child: Text("audi"), value: "audi"),
+      DropdownMenuItem(child: Text("porsche"), value: "porsche"),
+      DropdownMenuItem(child: Text("bmw"), value: "bmw"),
+      DropdownMenuItem(child: Text("volvo"), value: "volvo"),
+      DropdownMenuItem(child: Text("maserati"), value: "maserati"),
+      DropdownMenuItem(child: Text("fiat"), value: "fiat"),
+      DropdownMenuItem(child: Text("volkswagen"), value: "volkswagen"),
+      DropdownMenuItem(child: Text("toyota"), value: "toyota"),
+      DropdownMenuItem(child: Text("jeep"), value: "jeep"),
+      DropdownMenuItem(child: Text("hyundai"), value: "hyundai"),
+      DropdownMenuItem(child: Text("alfa-romeo"), value: "alfa-romeo"),
+      DropdownMenuItem(child: Text("kia"), value: "kia"),
+      DropdownMenuItem(child: Text("mazda"), value: "mazda"),
+      DropdownMenuItem(child: Text("nissan"), value: "nissan"),
+    ];
+    return menuItems;
+  }
+
+  // List<DropdownMenuItem<String>> get dropdownItemsModel {
+  //   List<DropdownMenuItem<String>> menuItems = [
+  //     DropdownMenuItem(child: Text("Chrysler"), value: "Chrysler"),
+  //     DropdownMenuItem(child: Text("Honda"), value: "Honda"),
+  //     DropdownMenuItem(child: Text("Mercedes-benz"), value: "Mercedes-benz"),
+  //     DropdownMenuItem(child: Text("Ford"), value: "Ford"),
+  //     DropdownMenuItem(child: Text("gmc"), value: "gmc"),
+  //     DropdownMenuItem(child: Text("audi"), value: "audi"),
+  //     DropdownMenuItem(child: Text("porsche"), value: "porsche"),
+  //     DropdownMenuItem(child: Text("bmw"), value: "bmw"),
+  //     DropdownMenuItem(child: Text("volvo"), value: "volvo"),
+  //     DropdownMenuItem(child: Text("maserati"), value: "maserati"),
+  //     DropdownMenuItem(child: Text("fiat"), value: "fiat"),
+  //     DropdownMenuItem(child: Text("volkswagen"), value: "volkswagen"),
+  //     DropdownMenuItem(child: Text("toyota"), value: "toyota"),
+  //     DropdownMenuItem(child: Text("jeep"), value: "jeep"),
+  //     DropdownMenuItem(child: Text("hyundai"), value: "hyundai"),
+  //     DropdownMenuItem(child: Text("alfa-romeo"), value: "alfa-romeo"),
+  //     DropdownMenuItem(child: Text("kia"), value: "kia"),
+  //     DropdownMenuItem(child: Text("mazda"), value: "mazda"),
+  //     DropdownMenuItem(child: Text("nissan"), value: "nissan"),
+  //   ];
+  //   return menuItems;
+  // }
+  List<DropdownMenuItem<String>> get dropdownItemsColor {
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(child: Text("White"), value: "White"),
+      DropdownMenuItem(child: Text("Black"), value: "Black"),
+      DropdownMenuItem(child: Text("Gray"), value: "Gray"),
+      DropdownMenuItem(child: Text("Silver"), value: "Silver"),
+      DropdownMenuItem(child: Text("Red"), value: "Red"),
+      DropdownMenuItem(child: Text("Blue"), value: "Blue"),
+      DropdownMenuItem(child: Text("Brown"), value: "Brown"),
+      DropdownMenuItem(child: Text("Green"), value: "Green"),
+      DropdownMenuItem(child: Text("Beige"), value: "Beige"),
+      DropdownMenuItem(child: Text("Orange"), value: "Orange"),
+      DropdownMenuItem(child: Text("Gold"), value: "Gold"),
+      DropdownMenuItem(child: Text("Yellow"), value: "Yellow"),
+      DropdownMenuItem(child: Text("Purple"), value: "Purple"),
+    ];
+    return menuItems;
+  }
+
+  List<DropdownMenuItem<String>> get dropdownItemsEnergyType {
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(child: Text("Gasoline"), value: "Gasoline"),
+      DropdownMenuItem(child: Text("Diesel"), value: "Diesel"),
+      DropdownMenuItem(child: Text("Electric"), value: "Electric"),
+      DropdownMenuItem(
+          child: Text("Hybrid Electric"), value: "Hybrid Electric"),
+      DropdownMenuItem(
+          child: Text("Plug-in Hybrid Electric"),
+          value: "Plug-in Hybrid Electric"),
     ];
     return menuItems;
   }
@@ -41,75 +115,42 @@ class _AddCarScreenState extends State<AddCarScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    var x = getManufacturer().then((value) => print(value.length));
-    //print("CarManufacturerList");
-    print(x);
   }
 
-  List<DropdownMenuItem<String>> get soumaya {
-    // CarManufacturerList = getManufacturer() as List;
-    // print(CarManufacturerList);
-    var CarManufacturerList = getManufacturer();
-    //print("CarManufacturerList");
-    var lista = [];
-    List<DropdownMenuItem<String>> menuItemss = [];
+  //List<DropdownMenuItem<String>> get dropdownItemsCarManufacturer {
+  //   // CarManufacturerList = getManufacturer() as List;
+  //   // print(CarManufacturerList);
+  //   // var CarManufacturerList = getManufacturer();
+  //   var lista = [];
+  //   List<DropdownMenuItem<String>> menuItemss = [];
+  //   menuItemss.add(
+  //     DropdownMenuItem(child: Text("Other"), value: "Other"),
+  //   );
+  //   getManufacturer().then((value) => {
+  //         for (var element in value) {lista.add(element)},
+  //         for (var i = 0; i < lista.length; i++)
+  //           {
+  //             menuItemss.add(
+  //               DropdownMenuItem(
+  //                   child: Text(lista[i].toString()),
+  //                   value: lista[i].toString()),
+  //             ),
+  //           },
+  //         print("menuItemss.length"),
+  //         print(menuItemss.length),
+  //       });
 
-    getManufacturer().then((value) => {
-          for (var element in value) {lista.add(element)},
-          menuItemss.add(
-            DropdownMenuItem(child: Text("USA"), value: "USA"),
-          ),
-          print(lista.length),
-          print(menuItemss.length),
-          print(lista[2].toString()),
-          for (var i = 0; i < lista.length; i++)
-            {
-              print('reppp'),
-              menuItemss.add(
-                DropdownMenuItem(child: Text(lista[i]), value: lista[i]),
-              )
-            },
-        });
-    print('kjjjjjjjjjjjjjjjjjjj');
-    print(menuItemss.length);
-    //print(CarManufacturerList);
-    /*   List<DropdownMenuItem<String>> menuItemss = [];
-    menuItemss.add(
-      DropdownMenuItem(child: Text("USA"), value: "USA"),
-    );
-
-    for (var i = 0; i < CarManufacturerList.length; i++) {
-      menuItemss.add(
-        DropdownMenuItem(
-            child: Text(CarManufacturerList[i]), value: CarManufacturerList[i]),
-      );
-    }*/
-
-    return menuItemss;
-  }
-
-  /*
-
-   List<DropdownMenuItem<String>> get dropdownItemsManufacturer {
-    CarManufacturerList = getManufacturer() as List;
-    for (var element in CarManufacturerList) {
-      print(element);
-      DropdownMenuItem(child: element, value: element);
-      List<DropdownMenuItem<String>> menuItems = [
-        DropdownMenuItem(child: element, value: element)
-      ];
-    }
-    return menuItems;
-  }
-  */
+  //   print('menuItemss.length####');
+  //   // print(menuItemss.length);
+  //   print(menuItemss.runtimeType);
+  //   return menuItemss;
+  // }
 
   @override
   void setState(VoidCallback fn) {
     // TODO: implement setState
     super.setState(fn);
-    CarManufacturerList = getManufacturer();
-    print("CarManufacturerList");
-    //print(CarManufacturerList);
+    //getManufacturer();
   }
 
   @override
@@ -195,54 +236,55 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       ),
                       icon: const Icon(Icons.arrow_drop_down_circle,
                           color: Color(0xFF008CFF)),
-                      value: selectedValue,
-                      items: dropdownItems,
+                      value: selectedValueManufacturer,
+                      items: dropdownItemsCarManufacturer,
                       onChanged: (String? newValue) {
                         setState(() {
-                          brand = newValue!;
+                          selectedValueManufacturer = newValue!;
+                          brand = newValue;
                         });
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'What is your car model?',
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            color: Color(0xFF008CFF),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      icon: const Icon(Icons.arrow_drop_down_circle,
-                          color: Color(0xFF008CFF)),
-                      value: selectedValue,
-                      items: dropdownItems,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          model = newValue!;
-                        });
-                      },
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.max,
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: [
+                  //       Text(
+                  //         'What is your car model?',
+                  //         style: TextStyle(
+                  //           fontFamily: 'DM Sans',
+                  //           color: Color(0xFF008CFF),
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: DropdownButtonFormField(
+                  //     decoration: InputDecoration(
+                  //       enabledBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //       ),
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //       ),
+                  //     ),
+                  //     icon: const Icon(Icons.arrow_drop_down_circle,
+                  //         color: Color(0xFF008CFF)),
+                  //     value: selectedValue,
+                  //     items: dropdownItems,
+                  //     onChanged: (String? newValue) {
+                  //       setState(() {
+                  //         model = newValue!;
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -273,11 +315,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       ),
                       icon: const Icon(Icons.arrow_drop_down_circle,
                           color: Color(0xFF008CFF)),
-                      value: selectedValue,
-                      items: dropdownItems,
+                      value: selectedValueColor,
+                      items: dropdownItemsColor,
                       onChanged: (String? newValue) {
                         setState(() {
-                          color = newValue!;
+                          selectedValueColor = newValue!;
+                          color = newValue;
                         });
                       },
                     ),
@@ -312,12 +355,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       ),
                       icon: const Icon(Icons.arrow_drop_down_circle,
                           color: Color(0xFF008CFF)),
-                      value: selectedValue,
-                      //items: soumaya,
-                      items: soumaya,
+                      value: selectedValueEnergyType,
+                      items: dropdownItemsEnergyType,
                       onChanged: (String? newValue) {
                         setState(() {
-                          energy_type = newValue!;
+                          selectedValueEnergyType = newValue!;
+                          energy_type = newValue;
                         });
                       },
                     ),
@@ -325,13 +368,20 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ElevatedButton(
                     child: Text("Confirm"),
                     onPressed: () {
-                      getManufacturer();
+                      //getManufacturer();
+                      CarApi.postCars(brand, model, color, energy_type);
                       //postCars(brand, model, color, energy_type);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ShareRideScreen(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xFF008CFF),
                       onPrimary: Colors.white,
-                      //fixedSize: Size(150, 50),
+                      fixedSize: Size(150, 50),
                       textStyle: TextStyle(fontFamily: 'DM Sans', fontSize: 19),
                     ),
                   ),
@@ -353,57 +403,5 @@ class _AddCarScreenState extends State<AddCarScreen> {
         ),
       ),
     );
-  }
-
-  Future<dynamic> postCars(String a, String b, String c, String d) async {
-    print('****************');
-    print(a);
-    var url = 'http://10.0.2.2:3100/Api/car';
-    var data = {"brand": a, "model": b, "color": c, "energy_type": d};
-    var response = await http.post(
-      url,
-      body: json.encode(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
-    var message = jsonDecode(response.body);
-    print("tes $message");
-    print('bnj');
-  }
-
-//  List<Manufacturer> Manufacturer = [];
-  /* Future<dynamic> getAll() async {
-    var response = await http.get(Uri.parse("http://10.0.2.2:1337/apis/"));
-      
-    if(response.statusCode==200){
-      user.clear();
-    }
-    var decodedData = jsonDecode(response.body);
-    for (var u in decodedData) {
-      user.add(Users(u['id'], u['name'], u['email'], u['password']));
-    }
-    return user;
-  }*/
-  Future<List> getManufacturer() async {
-    print('****************');
-    var url = 'http://10.0.2.2:3100/Api/getManufacturer';
-    var response = await http.get(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
-    var rep = jsonDecode(response.body);
-    var CarManufacturerList = rep["CarManufacturerList"];
-    //print(rep["CarManufacturerList"]);
-    // print(CarManufacturerList);
-    var List = [];
-    for (var element in CarManufacturerList) {
-      List.add(element);
-    }
-    //print("haja");
-    //print(List);
-    return List;
   }
 }

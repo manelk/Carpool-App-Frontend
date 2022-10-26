@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
 import 'package:carpoolapp/screens/dialog_screen.dart';
+import 'package:carpoolapp/screens/ride_screen.dart';
 
 void main() {
   runApp(ShareRideScreen());
@@ -13,7 +14,18 @@ class ShareRideScreen extends StatefulWidget {
 
 class _ShareRideScreenState extends State<ShareRideScreen> {
   String selectedValue = "USA";
+  String selectedFromWhere = "USA";
   List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(child: Text("USA"), value: "USA"),
+      DropdownMenuItem(child: Text("Canada"), value: "Canada"),
+      DropdownMenuItem(child: Text("Brazil"), value: "Brazil"),
+      DropdownMenuItem(child: Text("England"), value: "England"),
+    ];
+    return menuItems;
+  }
+
+  List<DropdownMenuItem<String>> get dropdownItemsFromWhere {
     List<DropdownMenuItem<String>> menuItems = [
       DropdownMenuItem(child: Text("USA"), value: "USA"),
       DropdownMenuItem(child: Text("Canada"), value: "Canada"),
@@ -81,25 +93,11 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      icon: const Icon(Icons.arrow_drop_down_circle,
-                          color: Color(0xFF008CFF)),
-                      value: selectedValue,
-                      items: dropdownItems,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedValue = newValue!;
-                        });
-                      },
-                    ),
+                    child: TextField(
+                        decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '',
+                    )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -120,25 +118,11 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      icon: const Icon(Icons.arrow_drop_down_circle,
-                          color: Color(0xFF008CFF)),
-                      value: selectedValue,
-                      items: dropdownItems,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedValue = newValue!;
-                        });
-                      },
-                    ),
+                    child: TextField(
+                        decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '',
+                    )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -159,25 +143,11 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      icon: const Icon(Icons.arrow_drop_down_circle,
-                          color: Color(0xFF008CFF)),
-                      value: selectedValue,
-                      items: dropdownItems,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedValue = newValue!;
-                        });
-                      },
-                    ),
+                    child: TextField(
+                        decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '',
+                    )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -198,25 +168,11 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      icon: const Icon(Icons.arrow_drop_down_circle,
-                          color: Color(0xFF008CFF)),
-                      value: selectedValue,
-                      items: dropdownItems,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedValue = newValue!;
-                        });
-                      },
-                    ),
+                    child: TextField(
+                        decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: '',
+                    )),
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),

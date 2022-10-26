@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:carpoolapp/apis/car_api.dart';
+
 class CarInformationScreen extends StatefulWidget {
   const CarInformationScreen({Key? key}) : super(key: key);
 
@@ -13,17 +15,29 @@ class CarInformationScreen extends StatefulWidget {
 }
 
 class _CarInformationScreenState extends State<CarInformationScreen> {
+  late Future<Car>? futureCar;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("whatever");
-    var x = getCarInformation().then((value) => {
-          for (var element in value) {print(element["_id"])}
-        });
+    futureCar = CarApi.fetchCar();
+    FutureBuilder<Car>(
+      future: futureCar,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var data = snapshot.data!;
+          return Text(data.brand!);
+        } else {
+          if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
   }
-
-  List<String> litems = ["1", "2", "Third", "4"];
 
   @override
   Widget build(BuildContext context) {
@@ -39,132 +53,130 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
         actions: [],
         elevation: 2,
       ),
-      body: new ListView.builder(
-          itemCount: litems.length,
-          itemBuilder: (BuildContext ctxt, int index) {
-            return new Text(litems[index]);
-          }),
-      // body: SafeArea(
-      //   child: SingleChildScrollView(
-      //     child: GestureDetector(
-      //       onTap: () => FocusScope.of(context).unfocus(),
-      //       child: Padding(
-      //         padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-      //         child: Column(
-      //           mainAxisSize: MainAxisSize.max,
-      //           children: [
-      //             Row(
-      //               mainAxisSize: MainAxisSize.max,
-      //               mainAxisAlignment: MainAxisAlignment.center,
-      //               children: [
-      //                 Expanded(
-      //                   child: Image.asset(
-      //                     'images/passengercar2.png',
-      //                     width: 150,
-      //                     height: 150,
-      //                     fit: BoxFit.contain,
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //             Padding(
-      //               padding: const EdgeInsets.all(20),
-      //               child: Row(
-      //                 mainAxisSize: MainAxisSize.max,
-      //                 mainAxisAlignment: MainAxisAlignment.start,
-      //                 children: [
-      //                   Text(
-      //                     'Car Brand:',
-      //                     style: TextStyle(
-      //                       fontSize: 20,
-      //                       fontFamily: 'DM Sans',
-      //                       color: Color(0xFF008CFF),
-      //                       fontWeight: FontWeight.w500,
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //             Padding(
-      //               padding: const EdgeInsets.all(20),
-      //               child: Row(
-      //                 mainAxisSize: MainAxisSize.max,
-      //                 mainAxisAlignment: MainAxisAlignment.start,
-      //                 children: [
-      //                   Text(
-      //                     'Car Model:',
-      //                     style: TextStyle(
-      //                       fontSize: 20,
-      //                       fontFamily: 'DM Sans',
-      //                       color: Color(0xFF008CFF),
-      //                       fontWeight: FontWeight.w500,
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //             Padding(
-      //               padding: const EdgeInsets.all(20),
-      //               child: Row(
-      //                 mainAxisSize: MainAxisSize.max,
-      //                 mainAxisAlignment: MainAxisAlignment.start,
-      //                 children: [
-      //                   Text(
-      //                     'Car Color:',
-      //                     style: TextStyle(
-      //                       fontSize: 20,
-      //                       fontFamily: 'DM Sans',
-      //                       color: Color(0xFF008CFF),
-      //                       fontWeight: FontWeight.w500,
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
+      body: Center(
+          child: FutureBuilder<Car>(
+        future: futureCar,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var carInformation = snapshot.data;
 
-      //             //  FutureBuilder(future: getCarInformation(), builder: (context, (context, snapshot) => ),)
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
+            // return Text(testa!);
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Image.asset(
+                                'images/passengercar2.png',
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Car Brand: ',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'DM Sans',
+                                  color: Color(0xFF008CFF),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                carInformation!.brand.toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'DM Sans',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Car Model: ',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'DM Sans',
+                                  color: Color(0xFF008CFF),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                carInformation.model.toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'DM Sans',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Car Color: ',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'DM Sans',
+                                  color: Color(0xFF008CFF),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                carInformation.energy_type.toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'DM Sans',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+          }
+
+          //By default, show a loading spinner.
+          return const CircularProgressIndicator(
+            value: 20,
+          );
+        },
+      )),
     );
-  }
-
-  Future<List> getCarInformation() async {
-    print('****************');
-    var url = 'http://10.0.2.2:3100/Api/user/getCarByUser';
-    var response = await http.get(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
-    // Map<String, dynamic> carMap = jsonDecode(response.body);
-    // var car = Car.fromJson(carMap["CarByUser"]);
-    // print('Howdy, ${car.color}!');
-
-    var data = jsonDecode(response.body);
-    print("data");
-    var CarInformation = data["CarByUser"];
-    //print(CarInformation);
-    //print("type is ${CarInformation.runtimeType}");
-    // (jsonDecode(CarInformation) as List)
-    //     .map((e) => e as Map<String, dynamic>)
-    //     .toList();
-    // print("type is ${CarInformation.runtimeType}");
-    // CarInformation.forEach((key, value) {
-    //   print(key);
-    // });
-    //print(rep["CarManufacturerList"]);
-    // print(CarManufacturerList);
-    // var List = [];
-    // for (var element in CarInformation {
-    //   List.add(element);
-    // }
-    //print("haja");
-    //print(List);
-    return CarInformation;
   }
 }
