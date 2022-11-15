@@ -11,6 +11,7 @@ class CarApi {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       final jsonResponse = json.decode(response.body);
+      print(jsonResponse["CarByUser"][0]["car"]);
       return Car.fromJson(jsonResponse["CarByUser"][0]["car"]);
     } else {
       // If the server did not return a 200 OK response,
@@ -20,41 +21,41 @@ class CarApi {
   }
 
   static Future<dynamic> postCars(
-      String a, String b, String c, String d) async {
+      String brand, String model, String color, String energy_type) async {
     print('****************');
-    b = "Default Model";
-    var url = 'http://10.0.2.2:3100/Api/car';
-    var data = {"brand": a, "model": b, "color": c, "energy_type": d};
+    model = "Default Model";
+    var data = {
+      "brand": brand,
+      "model": model,
+      "color": color,
+      "energy_type": energy_type
+    };
     var response = await http.post(
-      url,
+      API_URL + '/car',
       body: json.encode(data),
       headers: {
         'Content-Type': 'application/json',
       },
     );
     var message = jsonDecode(response.body);
-    print("tes $message");
+    print("message");
+    print(message);
   }
 
   static Future<List> getManufacturer() async {
     print('****************');
-    var url = 'http://10.0.2.2:3100/Api/getManufacturer';
     var response = await http.get(
-      url,
+      API_URL + '/getManufacturer',
       headers: {
         'Content-Type': 'application/json',
       },
     );
     var rep = jsonDecode(response.body);
     var CarManufacturerList = rep["CarManufacturerList"];
-    //print(rep["CarManufacturerList"]);
-    // print(CarManufacturerList);
     var List = [];
     for (var element in CarManufacturerList) {
       List.add(element);
     }
-    // print("haja");
-    // print(List);
     return List;
   }
 }

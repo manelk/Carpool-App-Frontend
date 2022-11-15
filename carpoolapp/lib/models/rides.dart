@@ -1,7 +1,7 @@
 class Rides {
   late String? Destination;
   late String? Departure_Location;
-  late DateTime? Departure_Date;
+  late String? Departure_Date;
   late String? Departure_Time;
   late int? Ride_Fees;
 

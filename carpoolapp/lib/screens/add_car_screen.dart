@@ -25,9 +25,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String selectedValueColor = "Black";
 
   String model = "";
-  String brand = "";
-  String color = "";
-  String energy_type = "";
+  String brand = "Ford";
+  String color = "Black";
+  String energy_type = "Electric";
 
   List<DropdownMenuItem<String>> get dropdownItemsCarManufacturer {
     List<DropdownMenuItem<String>> menuItems = [
@@ -241,7 +241,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedValueManufacturer = newValue!;
-                          brand = newValue;
+                          brand = newValue.isEmpty
+                              ? selectedValueManufacturer
+                              : newValue;
+                          // brand = newValue != null
+                          //     ? newValue
+                          //     : selectedValueManufacturer;
                         });
                       },
                     ),
@@ -320,7 +325,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedValueColor = newValue!;
-                          color = newValue;
+                          color =
+                              newValue.isEmpty ? selectedValueColor : newValue;
                         });
                       },
                     ),
@@ -359,8 +365,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       items: dropdownItemsEnergyType,
                       onChanged: (String? newValue) {
                         setState(() {
+                          print("newValue.runtimeType");
+                          print(newValue.runtimeType);
                           selectedValueEnergyType = newValue!;
-                          energy_type = newValue;
+                          if (newValue.isEmpty) {
+                            energy_type = selectedValueEnergyType;
+                          } else {
+                            energy_type = newValue;
+                          }
                         });
                       },
                     ),
@@ -368,9 +380,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ElevatedButton(
                     child: Text("Confirm"),
                     onPressed: () {
-                      //getManufacturer();
-                      CarApi.postCars(brand, model, color, energy_type);
-                      //postCars(brand, model, color, energy_type);
+                      //CarApi.postCars(brand, model, color, energy_type);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -385,17 +395,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       textStyle: TextStyle(fontFamily: 'DM Sans', fontSize: 19),
                     ),
                   ),
-                  // FutureBuilder(
-                  //     future: getManufacturer(),
-                  //     builder: (context, snapshot) {
-                  //       if (snapshot.connectionState ==
-                  //           ConnectionState.waiting) {
-                  //         return const Center(
-                  //           child: CircularProgressIndicator(),
-                  //         );
-                  //       }
-                  //       return const Text("Testing this out");
-                  //     }),
                 ],
               ),
             ),

@@ -1,11 +1,12 @@
 import 'dart:convert';
 
+import 'package:carpoolapp/apis/car_api.dart';
 import 'package:carpoolapp/models/car.dart';
 import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:carpoolapp/apis/car_api.dart';
+import 'package:carpoolapp/apis/rides_api.dart';
 
 class CarInformationScreen extends StatefulWidget {
   const CarInformationScreen({Key? key}) : super(key: key);
@@ -59,7 +60,6 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var carInformation = snapshot.data;
-
             // return Text(testa!);
             return SafeArea(
               child: SingleChildScrollView(

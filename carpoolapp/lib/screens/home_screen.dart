@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/add_car_screen.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 void main() {
   runApp(HomeScreen());

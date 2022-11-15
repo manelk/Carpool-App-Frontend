@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
 import 'package:carpoolapp/screens/dialog_screen.dart';
 import 'package:carpoolapp/screens/ride_screen.dart';
+import 'package:carpoolapp/screens/rides_published_screen.dart';
+
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(ShareRideScreen());
@@ -13,6 +16,8 @@ class ShareRideScreen extends StatefulWidget {
 }
 
 class _ShareRideScreenState extends State<ShareRideScreen> {
+  TextEditingController timeinput = TextEditingController();
+  final _dateController = TextEditingController();
   String selectedValue = "USA";
   String selectedFromWhere = "USA";
   List<DropdownMenuItem<String>> get dropdownItems {
@@ -33,6 +38,18 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
       DropdownMenuItem(child: Text("England"), value: "England"),
     ];
     return menuItems;
+  }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    timeinput.text = ""; //set the initial value of text field
+    super.initState();
   }
 
   @override
@@ -96,7 +113,8 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                     child: TextField(
                         decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: '',
+                      hintText: 'Your location',
+                      prefixIcon: Icon(Icons.my_location),
                     )),
                   ),
                   Padding(
@@ -121,7 +139,8 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                     child: TextField(
                         decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: '',
+                      hintText: 'The destination',
+                      prefixIcon: Icon(Icons.location_on_outlined),
                     )),
                   ),
                   Padding(
@@ -131,7 +150,7 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'What time?',
+                          'What time is the departure?',
                           style: TextStyle(
                             fontFamily: 'DM Sans',
                             color: Color(0xFF008CFF),
@@ -144,10 +163,41 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextField(
-                        decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: '',
-                    )),
+                      controller:
+                          timeinput, //editing controller of this TextField
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.timer),
+                        hintText: "Departure time", //icon of text field
+                      ),
+                      readOnly:
+                          true, //set it true, so that user will not able to edit text
+                      onTap: () async {
+                        TimeOfDay? pickedTime = await showTimePicker(
+                          initialTime: TimeOfDay.now(),
+                          context: context,
+                        );
+
+                        if (pickedTime != null) {
+                          print(pickedTime.format(context)); //output 10:51 PM
+                          DateTime parsedTime = DateFormat.jm()
+                              .parse(pickedTime.format(context).toString());
+                          //converting to DateTime so that we can further format on different pattern.
+                          print(parsedTime); //output 1970-01-01 22:53:00.000
+                          String formattedTime =
+                              DateFormat('HH:mm:ss').format(parsedTime);
+                          print(formattedTime); //output 14:59:00
+                          //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                          setState(() {
+                            timeinput.text =
+                                formattedTime; //set the value of text field.
+                          });
+                        } else {
+                          print("Time is not selected");
+                        }
+                      },
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -168,44 +218,24 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: TextField(
-                        decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: '',
-                    )),
+                    child: _datePicker(),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ElevatedButton(
-                          child: Text("Confirm"),
-                          onPressed: () {
-                            print('Button Avaible rides pressed ...');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xFF008CFF),
-                            onPrimary: Colors.white,
-                            fixedSize: Size(130, 40),
-                            textStyle:
-                                TextStyle(fontFamily: 'DM Sans', fontSize: 15),
-                          ),
+                  ElevatedButton(
+                    child: Text("Confirm"),
+                    onPressed: () {
+                      //CarApi.postCars(brand, model, color, energy_type);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RidesPublishedScreen(),
                         ),
-                        ElevatedButton(
-                          child: Text("Deny"),
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xFFEA3939),
-                            onPrimary: Colors.white,
-                            fixedSize: Size(130, 40),
-                            textStyle:
-                                TextStyle(fontFamily: 'DM Sans', fontSize: 15),
-                          ),
-                        ),
-                      ],
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFF008CFF),
+                      onPrimary: Colors.white,
+                      fixedSize: Size(150, 50),
+                      textStyle: TextStyle(fontFamily: 'DM Sans', fontSize: 19),
                     ),
                   ),
                 ],
@@ -214,6 +244,32 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _datePicker() {
+    return TextField(
+      controller: _dateController,
+      readOnly: true,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        prefixIcon: Icon(Icons.event),
+        hintText: "Date",
+      ),
+      onTap: () async {
+        final selectedDate = await showDatePicker(
+          context: context,
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+          initialDate: DateTime.now(),
+          selectableDayPredicate: (day) => day.isBefore(DateTime.now()),
+        );
+        if (selectedDate != null) {
+          setState(() {
+            _dateController.text = DateFormat.yMd().format(selectedDate);
+          });
+        }
+      },
     );
   }
 }
