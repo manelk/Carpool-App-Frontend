@@ -1,9 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 
 import 'package:carpoolapp/apis/car_api.dart';
 import 'package:carpoolapp/models/car.dart';
 import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
+import 'package:carpoolapp/screens/add_car_screen.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'package:carpoolapp/apis/rides_api.dart';
@@ -20,6 +24,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
 
   @override
   void initState() {
+    // ignore: todo
     // TODO: implement initState
     super.initState();
     futureCar = CarApi.fetchCar();
@@ -49,7 +54,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
           'My car information',
           style: TextStyle(color: Color(0xFF008CFF)),
         ),
-        backgroundColor: Color(0xFFF8F8F8),
+        backgroundColor: const Color(0xFFF8F8F8),
         automaticallyImplyLeading: false,
         actions: [],
         elevation: 2,
@@ -66,7 +71,8 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                 child: GestureDetector(
                   onTap: () => FocusScope.of(context).unfocus(),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -90,8 +96,10 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              // ignore: prefer_const_constructors
                               Text(
                                 'Car Brand: ',
+                                // ignore: prefer_const_constructors
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'DM Sans',
@@ -101,6 +109,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                               ),
                               Text(
                                 carInformation!.brand.toString(),
+                                // ignore: prefer_const_constructors
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'DM Sans',
@@ -115,9 +124,10 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              // ignore: prefer_const_constructors
                               Text(
                                 'Car Model: ',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'DM Sans',
                                   color: Color(0xFF008CFF),
@@ -126,7 +136,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                               ),
                               Text(
                                 carInformation.model.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'DM Sans',
                                 ),
@@ -140,7 +150,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Car Color: ',
                                 style: TextStyle(
                                   fontSize: 20,
@@ -151,10 +161,53 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                               ),
                               Text(
                                 carInformation.energy_type.toString(),
+                                // ignore: prefer_const_constructors
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'DM Sans',
                                 ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              /** Edit car */
+                              OutlinedButton.icon(
+                                onPressed: () {
+                                  //  CarApi.editCar();
+                                },
+                                // ignore: prefer_const_constructors
+                                icon: Icon(
+                                  Icons.edit,
+                                  size: 24.0,
+                                ),
+                                label: const Text('Edit'),
+                              ),
+                              /** Delete car */
+                              OutlinedButton.icon(
+                                onPressed: () {
+                                  showAlertDialog(
+                                      context, carInformation.id.toString());
+                                  // CarApi.deleteCar("63590d11cf8cb5f009c53314");
+                                  // setState(() {
+                                  //   futureCar = CarApi.deleteCar(
+                                  //       "63590d11cf8cb5f009c53314");
+                                  // });
+                                },
+                                // ignore: prefer_const_constructors
+                                icon: Icon(
+                                  color: Colors.red,
+                                  Icons.delete_forever,
+                                  size: 24.0,
+                                ),
+                                // ignore: prefer_const_constructors
+                                label: Text('Delete',
+                                    style: const TextStyle(color: Colors.red)),
                               ),
                             ],
                           ),
@@ -167,10 +220,75 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
             );
           } else {
             if (snapshot.hasError) {
-              return Text('${snapshot.error}');
+              return Column(
+                children: [
+                  Center(
+                    child: Image.asset(
+                      'images/nocarscreen.png',
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const Expanded(
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                          child: Text(
+                            'It seems like there is no car here!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 17),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const Expanded(
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                          child: Text('Please add one to share a ride.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color(0XFF0000EE), fontSize: 14)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(50),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddCarScreen(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        // side: const BorderSide(color: Color(0xFF008CFF), width: 3),
+                        primary: const Color(0xFF008CFF),
+                        onPrimary: Colors.white,
+                        fixedSize: const Size(150, 50),
+                        textStyle: const TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      child: const Text("Add Your Car"),
+                    ),
+                  ),
+                ],
+              );
             }
           }
-
           //By default, show a loading spinner.
           return const CircularProgressIndicator(
             value: 20,
@@ -179,4 +297,41 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
       )),
     );
   }
+}
+
+/** Dialog confirmation delete */
+
+showAlertDialog(BuildContext context, String idCar) {
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: const Text("Cancel"),
+    onPressed: () {
+      Navigator.of(context).pop(); // dismiss dialog
+    },
+  );
+  Widget continueButton = FlatButton(
+    child: const Text("Yes, I'm sure!"),
+    onPressed: () {
+      print("idCar:  $idCar");
+      Navigator.of(context).pop(); // dismiss dialog
+      //CarApi.deleteCar(idCar); // Function to delete car from DB.
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text("Action confirmation"),
+    content:
+        const Text("Are you sure you want to delete your car information?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

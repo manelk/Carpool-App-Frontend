@@ -1,4 +1,5 @@
 class Rides {
+  /// ? Supports null values */
   late String? Destination;
   late String? Departure_Location;
   late String? Departure_Date;

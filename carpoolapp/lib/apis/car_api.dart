@@ -12,10 +12,45 @@ class CarApi {
       // then parse the JSON.
       final jsonResponse = json.decode(response.body);
       print(jsonResponse["CarByUser"][0]["car"]);
+      print(Car.fromJson(jsonResponse["CarByUser"][0]["car"]).id);
       return Car.fromJson(jsonResponse["CarByUser"][0]["car"]);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<Car> editCar(id_car) async {
+    final response =
+        await http.patch(Uri.parse(API_URL + '/car/editCarInformation/'));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      final jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      return jsonResponse;
+      // return Car.fromJson(jsonResponse["CarByUser"][0]["car"]);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<Car> deleteCar(idCar) async {
+    final response = await http
+        .delete(Uri.parse(API_URL + '/car/deleteCarInformation/' + idCar));
+    print("idCar:" + " " + idCar);
+    print(API_URL + '/car/deleteCarInformation/' + idCar);
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response, then parse the JSON.
+      final jsonResponse = json.decode(response.body);
+      print("DELETE jsonResponse");
+      print(jsonResponse["deleteCar"]);
+      return jsonResponse["deleteCar"];
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
       throw Exception('Failed to load album');
     }
   }

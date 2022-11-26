@@ -1,10 +1,12 @@
 class Car {
+  late String? id;
   late String? brand;
   late String? color;
   late String? model;
   late String? energy_type;
 
   Car({
+    required this.id,
     required this.brand,
     required this.color,
     required this.model,
@@ -12,6 +14,7 @@ class Car {
   });
 
   Car.fromJson(Map<String, dynamic> json) {
+    id = json["_id"];
     brand = json["brand"];
     color = json["color"];
     model = json["model"];
@@ -19,6 +22,7 @@ class Car {
   }
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
+    _data["id"] = id;
     _data["brand"] = brand;
     _data["color"] = color;
     _data["model"] = model;
@@ -30,6 +34,7 @@ class Car {
 // Get data from backend
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'brand': brand,
       'model': model,
       'color': color,

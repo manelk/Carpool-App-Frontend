@@ -1,5 +1,3 @@
-// ignore_for_file: unused_import, depend_on_referenced_packages
-
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'package:carpoolapp/screens/add_car_screen.dart';

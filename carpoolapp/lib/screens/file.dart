@@ -65,7 +65,7 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
         _sessionToken = uuid.v4();
       });
     }
-    //getSuggestion(_DestinationController.text);
+    getSuggestion(_DestinationController.text);
     //print(_DestinationController.text);
   }
 
@@ -128,7 +128,7 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Padding(
+                  /*  Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
@@ -161,7 +161,7 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                           hintText: 'Your location',
                           prefixIcon: const Icon(Icons.my_location),
                         )),
-                  ),
+                  ),*/
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -185,144 +185,171 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                     child: TextField(
                         controller: _DestinationController,
                         keyboardType: TextInputType.text,
-                        onChanged: (text) {
-                          //print(text);
-                          //GoogleApi.findPlace(text);
-                          setState(() {
-                            Destination = text;
-                          });
-                        },
+
+                        // onChanged: (text) {
+                        //   //print(text);
+                        //   //GoogleApi.findPlace(text);
+                        //   setState(() {
+                        //     D  estination = text;
+                        //   });
+                        // },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'The destination',
                           prefixIcon: Icon(Icons.location_on_outlined),
                         )),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      children: [
-                        const Text(
-                          'What time is the departure?',
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            color: Color(0xFF008CFF),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: TextField(
-                      controller: timeinput,
-                      //editing controller of this TextField
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.timer),
-                        hintText: "Departure time", //icon of text field
-                      ),
-                      readOnly:
-                          true, //set it true, so that user will not able to edit text
-                      onTap: () async {
-                        TimeOfDay? pickedTime = await showTimePicker(
-                          initialTime: TimeOfDay.now(),
-                          context: context,
+                  Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: _placesList.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_placesList[index]['description']),
                         );
-
-                        if (pickedTime != null) {
-                          print(pickedTime.format(context)); //output 10:51 PM
-                          DateTime parsedTime = DateFormat.jm()
-                              .parse(pickedTime.format(context).toString());
-                          //converting to DateTime so that we can further format on different pattern.
-                          print(parsedTime); //output 1970-01-01 22:53:00.000
-                          String formattedTime =
-                              DateFormat('HH:mm').format(parsedTime);
-                          print(formattedTime); //output 14:59:00
-                          //DateFormat() is from intl package, you can format the time on any pattern you need.
-                          setState(() {
-                            /** Setting Departure_Time to Time input controller */
-                            timeinput.text = formattedTime;
-                            Departure_Time = formattedTime;
-                          });
-                        } else {
-                          print("Time is not selected");
-                        }
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'What date ?',
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            color: Color(0xFF008CFF),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: _datePicker(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      children: [
-                        const Text(
-                          'What is the ride fees?',
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            color: Color(0xFF008CFF),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: TextField(
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        ],
-                        keyboardType: TextInputType.number,
-                        controller: RideFeesController,
-                        onChanged: (text) {
-                          setState(() {
-                            Ride_Fees = text;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Ride Fees',
-                          prefixIcon: Icon(Icons.money),
-                        )),
-                  ),
+                  // Expanded(
+                  //     child: SizedBox(
+                  //   height: 200.0,
+                  //   child: ListView.builder(
+                  //     scrollDirection: Axis.horizontal,
+                  //     shrinkWrap: true,
+                  //     itemCount: _placesList.length,
+                  //     itemBuilder: (context, index) {
+                  //       return ListTile(
+                  //         title: Text(_placesList[index]['description']),
+                  //       );
+                  //     },
+                  //   ),
+                  // )),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.max,
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     // ignore: prefer_const_literals_to_create_immutables
+                  //     children: [
+                  //       const Text(
+                  //         'What time is the departure?',
+                  //         style: TextStyle(
+                  //           fontFamily: 'DM Sans',
+                  //           color: Color(0xFF008CFF),
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: TextField(
+                  //     controller: timeinput,
+                  //     //editing controller of this TextField
+                  //     decoration: InputDecoration(
+                  //       border: const OutlineInputBorder(),
+                  //       prefixIcon: Icon(Icons.timer),
+                  //       hintText: "Departure time", //icon of text field
+                  //     ),
+                  //     readOnly:
+                  //         true, //set it true, so that user will not able to edit text
+                  //     onTap: () async {
+                  //       TimeOfDay? pickedTime = await showTimePicker(
+                  //         initialTime: TimeOfDay.now(),
+                  //         context: context,
+                  //       );
+
+                  //       if (pickedTime != null) {
+                  //         print(pickedTime.format(context)); //output 10:51 PM
+                  //         DateTime parsedTime = DateFormat.jm()
+                  //             .parse(pickedTime.format(context).toString());
+                  //         //converting to DateTime so that we can further format on different pattern.
+                  //         print(parsedTime); //output 1970-01-01 22:53:00.000
+                  //         String formattedTime =
+                  //             DateFormat('HH:mm').format(parsedTime);
+                  //         print(formattedTime); //output 14:59:00
+                  //         //DateFormat() is from intl package, you can format the time on any pattern you need.
+                  //         setState(() {
+                  //           /** Setting Departure_Time to Time input controller */
+                  //           timeinput.text = formattedTime;
+                  //           Departure_Time = formattedTime;
+                  //         });
+                  //       } else {
+                  //         print("Time is not selected");
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.max,
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: [
+                  //       Text(
+                  //         'What date ?',
+                  //         style: TextStyle(
+                  //           fontFamily: 'DM Sans',
+                  //           color: Color(0xFF008CFF),
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: _datePicker(),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.max,
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     // ignore: prefer_const_literals_to_create_immutables
+                  //     children: [
+                  //       const Text(
+                  //         'What is the ride fees?',
+                  //         style: TextStyle(
+                  //           fontFamily: 'DM Sans',
+                  //           color: Color(0xFF008CFF),
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsets.all(10),
+                  //   child: TextField(
+                  //       inputFormatters: <TextInputFormatter>[
+                  //         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  //       ],
+                  //       keyboardType: TextInputType.number,
+                  //       controller: RideFeesController,
+                  //       onChanged: (text) {
+                  //         setState(() {
+                  //           Ride_Fees = text;
+                  //         });
+                  //       },
+                  //       decoration: InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         hintText: 'Ride Fees',
+                  //         prefixIcon: Icon(Icons.money),
+                  //       )),
+                  // ),
                   ElevatedButton(
                     onPressed: () {
                       // RidesApi.postRide(Destination, Departure_Location,
                       //     Departure_Date, Departure_Time, Ride_Fees);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RidesPublishedScreen(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => RidesPublishedScreen(),
+                      //   ),
+                      // );
                     },
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF008CFF),
