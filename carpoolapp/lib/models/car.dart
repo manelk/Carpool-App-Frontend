@@ -32,7 +32,7 @@ class Car {
   }
 
 // Get data from backend
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap(void Function(dynamic e) param0) {
     return {
       'id': id,
       'brand': brand,

@@ -67,167 +67,177 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
                 return Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: const Color(0xFF008CFF),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(10.0), //<-- SEE HERE
-                        ),
-                        elevation: 10,
-                        shadowColor: Colors.black,
-                        color: const Color(0xffF8F8F8),
-                        child: SizedBox(
-                          width: 400,
-                          height: 200,
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                10, 10, 10, 10),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Icon(Icons.my_location,
-                                          color: Color(0xFF008CFF)),
-                                      const Text(
-                                        'Departure location: ',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        snapshot.data![index].Destination
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Icon(Icons.location_on_outlined,
-                                          color: Color(0xFF008CFF)),
-                                      const Text(
-                                        'Destination: ',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        snapshot.data![index].Departure_Location
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Icon(Icons.date_range,
-                                          color: Color(0xFF008CFF)),
-                                      const Text(
-                                        'Date of pick up: ',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        snapshot.data![index].Departure_Date
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Icon(Icons.timer,
-                                          color: Color(0xFF008CFF)),
-                                      const Text(
-                                        'Time of pick up: ',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        snapshot.data![index].Destination
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.money,
-                                        color: Color(0xFF008CFF),
-                                      ),
-                                      const Text(
-                                        'Fees: ',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        snapshot.data![index].Destination
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'DM Sans',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                    child: Flexible(
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              color: const Color(0xFF008CFF),
                             ),
+                            borderRadius:
+                                BorderRadius.circular(10.0), //<-- SEE HERE
                           ),
-                        )),
+                          elevation: 10,
+                          shadowColor: Colors.black,
+                          color: const Color(0xffF8F8F8),
+                          child: SizedBox(
+                            width: 400,
+                            height: 210,
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  10, 10, 10, 10),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.my_location,
+                                            color: Color(0xFF008CFF)),
+                                        const Text(
+                                          'Departure location: ',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: Text(
+                                            snapshot.data![index].Destination
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: 'DM Sans',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.location_on_outlined,
+                                            color: Color(0xFF008CFF)),
+                                        const Text(
+                                          'Destination: ',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          snapshot
+                                              .data![index].Departure_Location
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.date_range,
+                                            color: Color(0xFF008CFF)),
+                                        const Text(
+                                          'Date of pick up: ',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          snapshot.data![index].Departure_Date
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.timer,
+                                            color: Color(0xFF008CFF)),
+                                        const Text(
+                                          'Time of pick up: ',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          snapshot.data![index].Departure_Time
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.money,
+                                          color: Color(0xFF008CFF),
+                                        ),
+                                        const Text(
+                                          'Fees: ',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          snapshot.data![index].Ride_Fees
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'DM Sans',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                    ),
                   ),
                 ); //SizedBox
               },

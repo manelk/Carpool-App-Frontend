@@ -1,17 +1,19 @@
 import 'dart:convert';
 
 import 'package:carpoolapp/config.dart';
+import 'package:carpoolapp/screens/rides_published_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
-import 'package:carpoolapp/screens/dialog_screen.dart';
-import 'package:carpoolapp/screens/ride_screen.dart';
-import 'package:carpoolapp/screens/rides_published_screen.dart';
 import 'package:carpoolapp/apis/rides_api.dart';
 import 'package:carpoolapp/apis/google_api.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 
 void main() {
   runApp(ShareRideScreen());
@@ -23,25 +25,29 @@ class ShareRideScreen extends StatefulWidget {
 }
 
 class _ShareRideScreenState extends State<ShareRideScreen> {
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _DestinationController = TextEditingController();
+  var uuid = Uuid();
+  String _sessionToken = "1235";
+  String _sessionTokenDestination = "12356";
+  List<dynamic> _placesList = [];
+  List<dynamic> _placesListDestination = [];
   TextEditingController timeinput = TextEditingController();
   final _dateController = TextEditingController();
 
-  /// TextField controllers */
-  static late TextEditingController _DestinationController =
-      TextEditingController();
+  /// TextField controllers */s
   TextEditingController DepartureLocationController = TextEditingController();
   TextEditingController DepartureDateController = TextEditingController();
   TextEditingController DepartureTimeController = TextEditingController();
   TextEditingController RideFeesController = TextEditingController();
-  var uuid = Uuid();
-  String _sessionToken = '122344';
-  List<dynamic> _placesList = [];
 
   String Destination = '';
   String Departure_Date = '';
   String Departure_Location = '';
   String Departure_Time = '';
   String Ride_Fees = '';
+  late bool isShowListTile = true;
+  late bool isShowListTileDestination = true;
 
   @override
   void dispose() {
@@ -51,11 +57,13 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    timeinput.text = ""; //set the initial value of text field
-
-    _DestinationController.addListener(() {
+    _controller.addListener(() {
       onChange();
+    });
+    _DestinationController.addListener(() {
+      onChangeDestination();
     });
   }
 
@@ -65,31 +73,361 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
         _sessionToken = uuid.v4();
       });
     }
-    //getSuggestion(_DestinationController.text);
-    //print(_DestinationController.text);
+    getSuggestion(_controller.text);
+    // getSuggestion(_DestinationController.text);
+  }
+
+  void onChangeDestination() {
+    if (_sessionToken == null) {
+      setState(() {
+        _sessionTokenDestination = uuid.v4();
+      });
+    }
+    getSuggestionDestination(_DestinationController.text);
   }
 
   void getSuggestion(String input) async {
+    String kPlaces_Api_Key = "AIzaSyD6hhlx6VoL2n0HRnwuiTeZwuRN0_og0ys";
     String baseURL =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json";
     String request =
-        '$baseURL?input=$input&sessiontoken=$_sessionToken&key=$mapKey';
-
+        '$baseURL?input=$input&key=$kPlaces_Api_Key&sessionToken=$_sessionToken';
+    // print(
+    //     '$baseURL?input=$input&key=$kPlaces_Api_Key&sessionToken=$_sessionToken');
     var response = await http.get(Uri.parse(request));
-    var data = response.body.toString();
-    print("response ###");
-    print(data);
+
     if (response.statusCode == 200) {
       setState(() {
         _placesList = jsonDecode(response.body.toString())['predictions'];
       });
     } else {
-      throw Exception('Failed to load data.');
+      throw Exception('Failed to load data');
     }
+  }
+
+  void getSuggestionDestination(String input) async {
+    String kPlaces_Api_Key = "AIzaSyD6hhlx6VoL2n0HRnwuiTeZwuRN0_og0ys";
+    String baseURL =
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String request =
+        '$baseURL?input=$input&key=$kPlaces_Api_Key&sessionToken=$_sessionTokenDestination';
+    // print(
+    //     '$baseURL?input=$input&key=$kPlaces_Api_Key&sessionToken=$_sessionToken');
+    var response = await http.get(Uri.parse(request));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        _placesListDestination =
+            jsonDecode(response.body.toString())['predictions'];
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+  double getScreenWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width;
   }
 
   @override
   Widget build(BuildContext context) {
+    final googleMapWidget = GoogleMap(
+      mapType: MapType.normal,
+      initialCameraPosition: CameraPosition(
+        target: _center,
+        zoom: 14.0,
+      ),
+      rotateGesturesEnabled: false,
+      tiltGesturesEnabled: false,
+      mapToolbarEnabled: false,
+      myLocationEnabled: true,
+      myLocationButtonEnabled: true,
+      padding: const EdgeInsets.only(top: 300),
+    );
+
+    final destinationLocationWidget = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: SingleChildScrollView(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 1.2,
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const Text(
+                        'From where?',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          color: Color(0xFF008CFF),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Your location',
+                      prefixIcon: const Icon(Icons.my_location),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: isShowListTile,
+                  child: Expanded(
+                      child: Container(
+                    color: Color(0xffF8F8F8),
+                    height: 200,
+                    child: ListView.builder(
+                        itemCount: _placesList.length,
+                        itemBuilder: ((context, index) {
+                          return Visibility(
+                            visible: isShowListTile,
+                            child: ListTile(
+                              onTap: () async {
+                                List<Location> locations =
+                                    await locationFromAddress(
+                                        _placesList[index]['description']);
+                                _controller.text =
+                                    _placesList[index]['description'];
+                                Departure_Location =
+                                    _placesList[index]['description'];
+                                ;
+                                /** This is the option selected */
+                                print(_placesList[index]['description']);
+                                print(locations.last.longitude);
+                                print(locations.last.latitude);
+                                isShowListTile = false;
+                              },
+                              title: Text(_placesList[index]['description']),
+                              leading: Icon(Icons.pin_drop),
+                            ),
+                          );
+                        })),
+                  )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const Text(
+                        'To where?',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          color: Color(0xFF008CFF),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _DestinationController,
+                    decoration: const InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'The destination',
+                      prefixIcon: const Icon(Icons.location_on_outlined),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: isShowListTileDestination,
+                  child: Expanded(
+                      child: Container(
+                    color: Color(0xffF8F8F8),
+                    height: 200,
+                    child: ListView.builder(
+                        itemCount: _placesListDestination.length,
+                        itemBuilder: ((context, index) {
+                          return Visibility(
+                            visible: isShowListTileDestination,
+                            child: ListTile(
+                              onTap: () async {
+                                List<Location> locationDestination =
+                                    await locationFromAddress(
+                                        _placesListDestination[index]
+                                            ['description']);
+                                _DestinationController.text =
+                                    _placesListDestination[index]
+                                        ['description'];
+                                Destination = _placesListDestination[index]
+                                    ['description'];
+
+                                /** This is the option selected */
+                                print(_placesListDestination[index]
+                                    ['description']);
+                                print(locationDestination.last.longitude);
+                                print(locationDestination.last.latitude);
+                                isShowListTileDestination = false;
+                              },
+                              title: Text(
+                                  _placesListDestination[index]['description']),
+                              leading: Icon(Icons.location_on_outlined),
+                            ),
+                          );
+                        })),
+                  )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const Text(
+                        'What time is the departure?',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          color: Color(0xFF008CFF),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: TextField(
+                    controller: timeinput,
+                    //editing controller of this TextField
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.timer),
+                      hintText: "Departure time", //icon of text field
+                    ),
+                    readOnly:
+                        true, //set it true, so that user will not able to edit text
+                    onTap: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        initialTime: TimeOfDay.now(),
+                        context: context,
+                      );
+
+                      if (pickedTime != null) {
+                        print(pickedTime.format(context)); //output 10:51 PM
+                        DateTime parsedTime = DateFormat.jm()
+                            .parse(pickedTime.format(context).toString());
+                        //converting to DateTime so that we can further format on different pattern.
+                        print(parsedTime); //output 1970-01-01 22:53:00.000
+                        String formattedTime =
+                            DateFormat('HH:mm').format(parsedTime);
+                        print(formattedTime); //output 14:59:00
+                        //DateFormat() is from intl package, you can format the time on any pattern you need.
+                        setState(() {
+                          /** Setting Departure_Time to Time input controller */
+                          timeinput.text = formattedTime;
+                          Departure_Time = formattedTime;
+                        });
+                      } else {
+                        print("Time is not selected");
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'What date ?',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          color: Color(0xFF008CFF),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: _datePicker(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const Text(
+                        'What is the ride fees?',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          color: Color(0xFF008CFF),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      keyboardType: TextInputType.number,
+                      controller: RideFeesController,
+                      onChanged: (text) {
+                        setState(() {
+                          Ride_Fees = text;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Ride Fees',
+                        prefixIcon: Icon(Icons.money),
+                      )),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    print(Destination + Departure_Location);
+                    // RidesApi.postRide(Destination, Departure_Location,
+                    //     Departure_Date, Departure_Time, Ride_Fees);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RidesPublishedScreen(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF008CFF),
+                    onPrimary: Color(0xffF8F8F8),
+                    fixedSize: const Size(150, 50),
+                    textStyle:
+                        const TextStyle(fontFamily: 'DM Sans', fontSize: 19),
+                  ),
+                  child: const Text("Save"),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xffF8F8F8),
@@ -107,34 +445,36 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => const HomeScreen(),
               ),
             );
           },
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          label: Text("Back"),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          label: const Text("Back"),
           style: ElevatedButton.styleFrom(
             primary: Colors.transparent,
             elevation: 0,
           ),
         ),
       ),
-      body: SafeArea(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
         child: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 1.2,
+            child: Container(
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.start,
+                      // ignore: prefer_const_literals_to_create_immutables
                       children: [
-                        Text(
+                        const Text(
                           'From where?',
                           style: TextStyle(
                             fontFamily: 'DM Sans',
@@ -146,21 +486,49 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: TextField(
-                        controller: DepartureLocationController,
-                        onChanged: (text) {
-                          //print(text);
-                          setState(() {
-                            Departure_Location = text;
-                          });
-                        },
-                        // ignore: prefer_const_constructors
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: 'Your location',
-                          prefixIcon: const Icon(Icons.my_location),
-                        )),
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText: 'Your location',
+                        prefixIcon: const Icon(Icons.my_location),
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: isShowListTile,
+                    child: Expanded(
+                        child: Container(
+                      color: Color(0xffF8F8F8),
+                      height: 200,
+                      child: ListView.builder(
+                          itemCount: _placesList.length,
+                          itemBuilder: ((context, index) {
+                            return Visibility(
+                              visible: isShowListTile,
+                              child: ListTile(
+                                onTap: () async {
+                                  List<Location> locations =
+                                      await locationFromAddress(
+                                          _placesList[index]['description']);
+                                  _controller.text =
+                                      _placesList[index]['description'];
+                                  Departure_Location =
+                                      _placesList[index]['description'];
+                                  ;
+                                  /** This is the option selected */
+                                  print(_placesList[index]['description']);
+                                  print(locations.last.longitude);
+                                  print(locations.last.latitude);
+                                  isShowListTile = false;
+                                },
+                                title: Text(_placesList[index]['description']),
+                                leading: Icon(Icons.pin_drop),
+                              ),
+                            );
+                          })),
+                    )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -181,22 +549,53 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(10),
-                    child: TextField(
-                        controller: _DestinationController,
-                        keyboardType: TextInputType.text,
-                        onChanged: (text) {
-                          //print(text);
-                          //GoogleApi.findPlace(text);
-                          setState(() {
-                            Destination = text;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'The destination',
-                          prefixIcon: Icon(Icons.location_on_outlined),
-                        )),
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _DestinationController,
+                      decoration: const InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText: 'The destination',
+                        prefixIcon: const Icon(Icons.location_on_outlined),
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: isShowListTileDestination,
+                    child: Expanded(
+                        child: Container(
+                      color: Color(0xffF8F8F8),
+                      height: 200,
+                      child: ListView.builder(
+                          itemCount: _placesListDestination.length,
+                          itemBuilder: ((context, index) {
+                            return Visibility(
+                              visible: isShowListTileDestination,
+                              child: ListTile(
+                                onTap: () async {
+                                  List<Location> locationDestination =
+                                      await locationFromAddress(
+                                          _placesListDestination[index]
+                                              ['description']);
+                                  _DestinationController.text =
+                                      _placesListDestination[index]
+                                          ['description'];
+                                  Destination = _placesListDestination[index]
+                                      ['description'];
+
+                                  /** This is the option selected */
+                                  print(_placesListDestination[index]
+                                      ['description']);
+                                  print(locationDestination.last.longitude);
+                                  print(locationDestination.last.latitude);
+                                  isShowListTileDestination = false;
+                                },
+                                title: Text(_placesListDestination[index]
+                                    ['description']),
+                                leading: Icon(Icons.location_on_outlined),
+                              ),
+                            );
+                          })),
+                    )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -315,6 +714,7 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      print(Destination + Departure_Location);
                       // RidesApi.postRide(Destination, Departure_Location,
                       //     Departure_Date, Departure_Time, Ride_Fees);
                       Navigator.push(
@@ -326,12 +726,12 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF008CFF),
-                      onPrimary: Colors.white,
+                      onPrimary: Color(0xffF8F8F8),
                       fixedSize: const Size(150, 50),
                       textStyle:
                           const TextStyle(fontFamily: 'DM Sans', fontSize: 19),
                     ),
-                    child: const Text("Confirm"),
+                    child: const Text("Save"),
                   ),
                 ],
               ),

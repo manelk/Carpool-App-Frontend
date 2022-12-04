@@ -31,7 +31,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   List<DropdownMenuItem<String>> get dropdownItemsCarManufacturer {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Chrysler"), value: "Chrysler"),
+      DropdownMenuItem(value: "Chrysler", child: Text("Chrysler")),
       DropdownMenuItem(child: Text("Honda"), value: "Honda"),
       DropdownMenuItem(child: Text("Mercedes-benz"), value: "Mercedes-benz"),
       DropdownMenuItem(child: Text("Ford"), value: "Ford"),

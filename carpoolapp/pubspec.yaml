@@ -38,9 +38,14 @@ dependencies:
   time_of_day_widget: ^1.0.0
   google_maps_flutter: ^2.1.1
   uuid: ^3.0.7
+  get: ^4.6.5
+  geocoding: ^2.0.5
+  flutter_polyline_points: ^0.2.4
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   animated_text_kit: ^4.2.2
   cupertino_icons: ^1.0.2

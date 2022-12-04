@@ -7,6 +7,8 @@ import 'package:carpoolapp/models/car.dart';
 import 'package:flutter/material.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
 import 'package:carpoolapp/screens/add_car_screen.dart';
+import 'package:carpoolapp/screens/edit_car_information.dart';
+import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -28,21 +30,6 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
     // TODO: implement initState
     super.initState();
     futureCar = CarApi.fetchCar();
-    FutureBuilder<Car>(
-      future: futureCar,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          var data = snapshot.data!;
-          return Text(data.brand!);
-        } else {
-          if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-        }
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
-    );
   }
 
   @override
@@ -56,7 +43,6 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
         ),
         backgroundColor: const Color(0xFFF8F8F8),
         automaticallyImplyLeading: false,
-        actions: [],
         elevation: 2,
       ),
       body: Center(
@@ -65,7 +51,15 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var carInformation = snapshot.data;
-            // return Text(testa!);
+            List<String> carList = [];
+            String brand = carInformation!.brand.toString();
+            String model = carInformation.model.toString();
+            String color = carInformation.color.toString();
+            String energy_type = carInformation.energy_type.toString();
+            carList.add(brand);
+            carList.add(model);
+            carList.add(color);
+            carList.add(energy_type);
             return SafeArea(
               child: SingleChildScrollView(
                 child: GestureDetector(
@@ -108,7 +102,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                                 ),
                               ),
                               Text(
-                                carInformation!.brand.toString(),
+                                carInformation.brand.toString(),
                                 // ignore: prefer_const_constructors
                                 style: TextStyle(
                                   fontSize: 20,
@@ -126,7 +120,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                             children: [
                               // ignore: prefer_const_constructors
                               Text(
-                                'Car Model: ',
+                                'Car energy type: ',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'DM Sans',
@@ -135,7 +129,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                                 ),
                               ),
                               Text(
-                                carInformation.model.toString(),
+                                carInformation.energy_type.toString(),
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'DM Sans',
@@ -160,7 +154,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                                 ),
                               ),
                               Text(
-                                carInformation.energy_type.toString(),
+                                carInformation.color.toString(),
                                 // ignore: prefer_const_constructors
                                 style: TextStyle(
                                   fontSize: 20,
@@ -177,16 +171,31 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               /** Edit car */
-                              OutlinedButton.icon(
-                                onPressed: () {
-                                  //  CarApi.editCar();
-                                },
-                                // ignore: prefer_const_constructors
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 24.0,
+                              GestureDetector(
+                                child: OutlinedButton.icon(
+                                  onPressed: () {
+                                    // print(carInformation.id.toString());
+                                    Get.off(() => EditCarScreen(
+                                        id: carInformation.id.toString()));
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => EditCarScreen(
+                                    //       carDetails: carList,
+                                    //     ),
+                                    //   ),
+                                    // );
+                                    // CarApi.editCar(
+                                    //   carInformation.id.toString(),
+                                    // );
+                                  },
+                                  // ignore: prefer_const_constructors
+                                  icon: Icon(
+                                    Icons.edit,
+                                    size: 24.0,
+                                  ),
+                                  label: const Text('Edit'),
                                 ),
-                                label: const Text('Edit'),
                               ),
                               /** Delete car */
                               OutlinedButton.icon(
