@@ -74,4 +74,36 @@ class RidesApi {
     print("Post ride message from back end");
     print(message[0]);
   }
+
+  static Future<List<Rides>>? fetchRidesPerSearch(String destination, String departure) async {
+    print('****************');
+    print("destination: " + destination);
+    print("departure: " + departure);
+    var data = {
+      "destination": "Mourouj 5",
+      "departure": "Tunis",
+    };
+    var response = await http.post(
+      '$API_URL/ridesPerSearch',
+      body: json.encode(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response, then parse the JSON.
+      final jsonResponse = json.decode(response.body);
+      final RideObject = jsonResponse["RideList"];
+      final List result = jsonResponse["RideList"];
+      print("response.body@@@@@@@@@@@@@@@@@@@@@@@@@@");
+      print(response.body);
+      final test = result.map((e) => {Rides.fromJson(e), print(e)}).toList();
+      // print(test);
+      return result.map((e) => Rides.fromJson(e)).toList();
+    } else {
+      // If the server did not return a 200 OK response, then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
 }

@@ -12,12 +12,13 @@ import 'package:carpoolapp/apis/car_api.dart';
 void main() {
   runApp(AddCarScreen());
 }
-
 class AddCarScreen extends StatefulWidget {
+//final int carN;
+  const AddCarScreen ({ Key? key}): super(key: key);
+
   @override
   State<AddCarScreen> createState() => _AddCarScreenState();
 }
-
 class _AddCarScreenState extends State<AddCarScreen> {
   String selectedValue = "Other";
   String selectedValueManufacturer = "Ford";
@@ -111,10 +112,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
     return menuItems;
   }
 
+  var noCar = 1;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    var noCar = 1;
+
   }
 
   //List<DropdownMenuItem<String>> get dropdownItemsCarManufacturer {
@@ -155,6 +159,115 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (noCar == 0) {
+      return Scaffold(
+        backgroundColor: Color(0xffF8F8F8),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            'Add a car',
+            style: TextStyle(color: Colors.black),
+          ),
+          leadingWidth: 100,
+          backgroundColor: Color.fromRGBO(248, 248, 248, 1),
+          automaticallyImplyLeading: false,
+          leading: ElevatedButton.icon(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(),
+                ),
+              );
+            },
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            label: Text("Back"),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.transparent,
+              elevation: 0,
+            ),
+          ),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Image.asset(
+                            'images/nocarscreen.png',
+                            width: 360,
+                            height: 270,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Center(
+                        child: Text(
+                          'It seems like there is no car here!',
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Center(
+                        child: Text(
+                          'Please add one to share a ride.',
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            color: Color(0xFF0000EE),
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          //CarApi.postCars(brand, model, color, energy_type);
+                          noCar+=1;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddCarScreen(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF008CFF),
+                          onPrimary: Colors.white,
+                          fixedSize: Size(150, 50),
+                          textStyle:
+                              TextStyle(fontFamily: 'DM Sans', fontSize: 19),
+                        ),
+                        child: const Text("Add a car"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       appBar: AppBar(
@@ -211,7 +324,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           'What is your car brand?',
                           style: TextStyle(

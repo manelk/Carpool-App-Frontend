@@ -1,3 +1,4 @@
+import 'package:carpoolapp/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'screens/home_screen.dart';
@@ -18,7 +19,14 @@ class CarpoolApp extends StatefulWidget {
   State<CarpoolApp> createState() => _CarpoolAppState();
 }
 
+
 class _CarpoolAppState extends State<CarpoolApp> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   int currentIndex = 0;
   final Screens = [
     const HomeScreen(),
@@ -30,8 +38,9 @@ class _CarpoolAppState extends State<CarpoolApp> {
   Widget build(BuildContext context) {
     // TextEditingController _controller = TextEditingController();
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+     debugShowCheckedModeBanner: false,
+      home: Splash(),
+      /*    home: Scaffold(
         body: Screens[currentIndex],
         // body: TextField(
         //   controller: _controller,
@@ -67,13 +76,13 @@ class _CarpoolAppState extends State<CarpoolApp> {
             ),
           ),
         ),
-      ),
+      ),*/
     );
   }
 }
 
 /****
- * 
+ *
  *  bottomNavigationBar: Container(
   color: Color(0xffF8F8F8),
   child: Padding(
@@ -105,5 +114,5 @@ class _CarpoolAppState extends State<CarpoolApp> {
     ),
   ),
 ),
-      
+
  */

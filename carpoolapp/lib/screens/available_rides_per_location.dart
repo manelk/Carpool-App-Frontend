@@ -1,22 +1,21 @@
-import 'package:carpoolapp/models/rides.dart';
+import 'package:carpoolapp/screens/search_ride_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../apis/rides_api.dart';
+import '../models/rides.dart';
 import 'home_screen.dart';
-import 'package:carpoolapp/models/rides.dart';
-import 'package:carpoolapp/apis/rides_api.dart';
-import 'package:carpoolapp/apis/google_api.dart';
 
-void main() {
-  runApp(RidesPublishedScreen());
-}
+class AvailableRidesPerSearchScreen extends StatefulWidget {
+  const AvailableRidesPerSearchScreen({Key? key}) : super(key: key);
 
-class RidesPublishedScreen extends StatefulWidget {
   @override
-  State<RidesPublishedScreen> createState() => _RidesPublishedScreenState();
+  State<AvailableRidesPerSearchScreen> createState() => _AvailableRidesPerSearchScreenState();
 }
 
-class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
+class _AvailableRidesPerSearchScreenState extends State<AvailableRidesPerSearchScreen> {
+
   late Future<List<Rides>>? futureRides;
   late final DateFormat formatter;
   Future<List<Rides>>? ridesFuture;
@@ -24,9 +23,8 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    ridesFuture = RidesApi.fetchRidesPerUser();
+    ridesFuture = RidesApi.fetchRidesPerSearch("Tunis", "Mourouj 5");
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +42,7 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => SearchDepartureScreen(),
               ),
             );
           },
@@ -74,7 +72,7 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
                               color: const Color(0xFF008CFF),
                             ),
                             borderRadius:
-                                BorderRadius.circular(10.0), //<-- SEE HERE
+                            BorderRadius.circular(10.0), //<-- SEE HERE
                           ),
                           elevation: 10,
                           shadowColor: Colors.black,
@@ -93,7 +91,7 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         Icon(Icons.my_location,
                                             color: Color(0xFF008CFF)),
@@ -123,7 +121,7 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         Icon(Icons.location_on_outlined,
                                             color: Color(0xFF008CFF)),
@@ -152,7 +150,7 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         Icon(Icons.date_range,
                                             color: Color(0xFF008CFF)),
@@ -180,7 +178,7 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         Icon(Icons.timer,
                                             color: Color(0xFF008CFF)),
@@ -208,7 +206,7 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         Icon(
                                           Icons.money,
@@ -245,10 +243,11 @@ class _RidesPublishedScreenState extends State<RidesPublishedScreen> {
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
-         // return Text("false");
+          // return Text("false");
           return const CircularProgressIndicator();
         },
       ),
     );
+
   }
 }
