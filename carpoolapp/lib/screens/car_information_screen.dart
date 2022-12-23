@@ -28,8 +28,8 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
   void initState() {
     // ignore: todo
     // TODO: implement initState
-    super.initState();
-    futureCar = CarApi.fetchCar();
+    super .initState();
+    futureCar = CarApi.getCarById("63999964f5d466b186348ad3");
   }
 
   @override
@@ -50,7 +50,11 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
         future: futureCar,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            print("snapshot.hasData");
+            print(snapshot.hasData);
             var carInformation = snapshot.data;
+            print("carInformation");
+            print(carInformation);
             List<String> carList = [];
             String brand = carInformation!.brand.toString();
             String model = carInformation.model.toString();
@@ -174,15 +178,14 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                               GestureDetector(
                                 child: OutlinedButton.icon(
                                   onPressed: () {
+                                    print("IN EDIT");
                                     // print(carInformation.id.toString());
                                     Get.off(() => EditCarScreen(
                                         id: carInformation.id.toString()));
                                     // Navigator.push(
                                     //   context,
                                     //   MaterialPageRoute(
-                                    //     builder: (context) => EditCarScreen(
-                                    //       carDetails: carList,
-                                    //     ),
+                                    //     builder: (context) =>HomeScreen(),
                                     //   ),
                                     // );
                                     // CarApi.editCar(
@@ -202,7 +205,7 @@ class _CarInformationScreenState extends State<CarInformationScreen> {
                                 onPressed: () {
                                   showAlertDialog(
                                       context, carInformation.id.toString());
-                                  // CarApi.deleteCar("63590d11cf8cb5f009c53314");
+                                   CarApi.deleteCar("63590d11cf8cb5f009c53314");
                                   // setState(() {
                                   //   futureCar = CarApi.deleteCar(
                                   //       "63590d11cf8cb5f009c53314");
@@ -315,15 +318,24 @@ showAlertDialog(BuildContext context, String idCar) {
   Widget cancelButton = FlatButton(
     child: const Text("Cancel"),
     onPressed: () {
-      Navigator.of(context).pop(); // dismiss dialog
+      Navigator.of(context).pop();
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) =>
+      //         HomeScreen(),
+      //   ),
+      // );
+     // Navigator.of(context).pop(); // dismiss dialog
     },
   );
   Widget continueButton = FlatButton(
     child: const Text("Yes, I'm sure!"),
     onPressed: () {
       print("idCar:  $idCar");
+      //CarApi.deleteCar(idCar);
       Navigator.of(context).pop(); // dismiss dialog
-      //CarApi.deleteCar(idCar); // Function to delete car from DB.
+// Function to delete car from DB.
     },
   );
   // set up the AlertDialog

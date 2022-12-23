@@ -56,6 +56,8 @@ class CarApi {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response, then parse the JSON.
       final jsonResponse = json.decode(response.body);
+      print("@@@@@@@@@@2 jsonResponse");
+      print(jsonResponse);
       return jsonResponse["deleteCar"];
     } else {
       // If the server did not return a 200 OK response, then throw an exception.

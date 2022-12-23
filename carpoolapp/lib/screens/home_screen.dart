@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
   final Screens = [
     const WelcomeScreen(),
-    AddCarScreen(),
+   // AddCarScreen(),
     const CarInformationScreen()
   ];
   @override
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: Container(
           color: Color(0xffF8F8F8),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: GNav(
               backgroundColor: Color(0xffF8F8F8),
               color: Colors.black,
@@ -50,10 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icons.home,
                   text: "Home",
                 ),
-                GButton(
-                  icon: Icons.car_rental,
-                  text: "Car",
-                ),
+                // GButton(
+                //   icon: Icons.car_rental,
+                //   text: "Car",
+                // ),
                 GButton(
                   icon: Icons.account_box,
                   text: "Account",

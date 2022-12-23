@@ -47,22 +47,22 @@ class RidesApi {
       throw Exception('Failed to load album');
     }
   }
-
   static Future<dynamic> postRide(String Destination, String Departure_Location,
       String Departure_Date, String Departure_Time, String Ride_Fees) async {
     print('****************');
     var data = {
+      "carId": "63590d96cf8cb5f009c5331a",
       "Destination": Destination,
       "Departure_Location": Departure_Location,
       "Departure_Date": Departure_Date,
       "Departure_Time": Departure_Time,
       "Ride_Fees": Ride_Fees,
     };
-    print("Destination: " + Destination);
-    print("Departure_Date: " + Departure_Date);
-    print("Departure_Location: " + Departure_Location);
-    print("Departure_Time: " + Departure_Time);
-    print("Ride_Fees: " + Ride_Fees);
+    // print("Destination: " + Destination);
+    // print("Departure_Date: " + Departure_Date);
+    // print("Departure_Location: " + Departure_Location);
+    // print("Departure_Time: " + Departure_Time);
+    // print("Ride_Fees: " + Ride_Fees);
     var response = await http.post(
       '$API_URL/ride',
       body: json.encode(data),
@@ -74,14 +74,13 @@ class RidesApi {
     print("Post ride message from back end");
     print(message[0]);
   }
-
   static Future<List<Rides>>? fetchRidesPerSearch(String destination, String departure) async {
-    print('****************');
-    print("destination: " + destination);
-    print("departure: " + departure);
+    print('**************** RIDES API');
+    print("destination: " + "Ariana");
+    print("departure: " + "Rades");
     var data = {
-      "destination": "Mourouj 5",
-      "departure": "Tunis",
+      "destination": destination,
+      "departure": departure,
     };
     var response = await http.post(
       '$API_URL/ridesPerSearch',
@@ -104,6 +103,17 @@ class RidesApi {
       // If the server did not return a 200 OK response, then throw an exception.
       throw Exception('Failed to load album');
     }
+  }
+  static Future<List<Rides>>? getRideById(id) async {
+    print("################" +id);
+    final response = await http.get(Uri.parse('$API_URL/rideById/'+id));
+    final jsonResponse = json.decode(response.body);
+    final List decodedJson = jsonResponse["RideById"];
+    print(response.body);
+    final List<Rides> rideById =
+    decodedJson.map(
+            (e) => Rides.fromJson(e) ).toList();
+    return rideById;
   }
 
 }

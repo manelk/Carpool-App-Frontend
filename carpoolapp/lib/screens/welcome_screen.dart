@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../apis/rides_api.dart';
 import '../models/rides.dart';
+import 'confirm_ride_screen.dart';
 
 void main() {
   runApp(const WelcomeScreen());
@@ -49,6 +50,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // What are you looking for today?
               Row(
@@ -151,229 +153,251 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Flexible(
-                                child: Card(
-                                    shape: RoundedRectangleBorder(
+                                child: GestureDetector(
+                                  onTap: () async{
+                                    print(snapshot.data![index].id.toString());
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ConfirmRideScreen(idCar: snapshot.data![index].id.toString()),
+                                      ),
+                                    );
+                                  },
+                                  child: Card(
+                                      shape: RoundedRectangleBorder(
 
-                                      borderRadius: BorderRadius.circular(
-                                          10.0), //<-- SEE HERE
-                                    ),
-                                    elevation: 8,
-                                    shadowColor: Colors.black,
-                                    color: const Color(0xffF8F8F8),
-                                    child: SizedBox(
-                                      width: 400,
-                                      height: 170,
-                                      child: Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(10, 10, 10, 10),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Row(
-                                              children: <Widget>[
-                                                Flexible(
-                                                  flex: 1,
-                                                  fit: FlexFit.tight,
-                                                  child: Container(
+                                        borderRadius: BorderRadius.circular(
+                                            10.0), //<-- SEE HERE
+                                      ),
+                                      elevation: 8,
+                                      shadowColor: Colors.black,
+                                      color: const Color(0xffF8F8F8),
+                                      child: SizedBox(
+                                        width: 400,
+                                        height: 170,
+                                        child: Padding(
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(10, 10, 10, 10),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Row(
+                                                children: <Widget>[
+                                                  Flexible(
+                                                    flex: 1,
+                                                    fit: FlexFit.tight,
+                                                    child: Container(
+                                                        height: 50,
+                                                        child: Wrap(
+                                                          crossAxisAlignment:
+                                                              WrapCrossAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Icon(
+                                                                size: 20.0,
+                                                                Icons.my_location,
+                                                                color: Colors.black87
+                                                            ),
+                                                            SizedBox(
+                                                              width: 3,
+                                                            ),
+                                                            Text(
+                                                              'Departure:',
+                                                              style: TextStyle(
+                                                                fontSize: 15.0,
+                                                                fontFamily:
+                                                                    'DM Sans',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )),
+                                                    //BoxDecoration
+                                                  ), //Flexible
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ), //SizedBox
+                                                  Flexible(
+                                                    flex: 1,
+                                                    fit: FlexFit.tight,
+                                                    child: Container(
                                                       height: 50,
                                                       child: Wrap(
-                                                        crossAxisAlignment:
-                                                            WrapCrossAlignment
-                                                                .start,
-                                                        children: [
-                                                          Icon(
-                                                              size: 20.0,
-                                                              Icons.my_location,
-                                                              color: Colors.black87
-                                                          ),
-                                                          SizedBox(
-                                                            width: 3,
-                                                          ),
-                                                          Text(
-                                                            'Departure:',
-                                                            style: TextStyle(
-                                                              fontSize: 15.0,
-                                                              fontFamily:
-                                                                  'DM Sans',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
+                                                          crossAxisAlignment:
+                                                              WrapCrossAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              snapshot
+                                                                  .data![index]
+                                                                  .Departure_Location
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 15,
+                                                                fontFamily:
+                                                                    'DM Sans',
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  //BoxDecoration
-                                                ), //Flexible
-                                                SizedBox(
-                                                  width: 10,
-                                                ), //SizedBox
-                                                Flexible(
-                                                  flex: 1,
-                                                  fit: FlexFit.tight,
-                                                  child: Container(
-                                                    height: 50,
-                                                    child: Wrap(
-                                                        crossAxisAlignment:
-                                                            WrapCrossAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            snapshot
-                                                                .data![index]
-                                                                .Departure_Location
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'DM Sans',
+                                                          ]),
+                                                    ), //Container
+                                                  ) //Flexible
+                                                ], //<Widget>[]
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Flexible(
+                                                    flex: 1,
+                                                    fit: FlexFit.tight,
+                                                    child: Container(
+                                                        height: 50,
+                                                        child: Wrap(
+                                                          crossAxisAlignment:
+                                                              WrapCrossAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Icon(
+                                                                size: 20.0,
+                                                                Icons
+                                                                    .location_on_outlined,
+                                                                color: Colors.black87),
+                                                            SizedBox(
+                                                              width: 3,
                                                             ),
-                                                          ),
-                                                        ]),
-                                                  ), //Container
-                                                ) //Flexible
-                                              ], //<Widget>[]
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                Flexible(
-                                                  flex: 1,
-                                                  fit: FlexFit.tight,
-                                                  child: Container(
+                                                            Text(
+                                                              'Destination:',
+                                                              style: TextStyle(
+                                                                fontSize: 15.0,
+                                                                fontFamily:
+                                                                    'DM Sans',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )),
+                                                    //BoxDecoration
+                                                  ), //Flexible
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ), //SizedBox
+                                                  Flexible(
+                                                    flex: 1,
+                                                    fit: FlexFit.tight,
+                                                    child: Container(
                                                       height: 50,
                                                       child: Wrap(
-                                                        crossAxisAlignment:
-                                                            WrapCrossAlignment
-                                                                .start,
-                                                        children: [
-                                                          Icon(
-                                                              size: 20.0,
-                                                              Icons
-                                                                  .location_on_outlined,
-                                                              color: Colors.black87),
-                                                          SizedBox(
-                                                            width: 3,
-                                                          ),
-                                                          Text(
-                                                            'Destination:',
-                                                            style: TextStyle(
-                                                              fontSize: 15.0,
-                                                              fontFamily:
-                                                                  'DM Sans',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
+                                                          crossAxisAlignment:
+                                                              WrapCrossAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              snapshot
+                                                                  .data![index]
+                                                                  .Destination
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 15,
+                                                                fontFamily:
+                                                                    'DM Sans',
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  //BoxDecoration
-                                                ), //Flexible
-                                                SizedBox(
-                                                  width: 10,
-                                                ), //SizedBox
-                                                Flexible(
-                                                  flex: 1,
-                                                  fit: FlexFit.tight,
-                                                  child: Container(
-                                                    height: 50,
-                                                    child: Wrap(
-                                                        crossAxisAlignment:
-                                                            WrapCrossAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            snapshot
-                                                                .data![index]
-                                                                .Destination
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'DM Sans',
-                                                            ),
-                                                          ),
-                                                        ]),
-                                                  ), //Container
-                                                ) //Flexible
-                                              ], //<Widget>[]
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                            ),
-                                            Divider(
-                                              height: 20,
-                                              thickness: 1,
-                                              color: Color(0xFF808080),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Expanded(
-                                                  child: Center(
-                                                    child: Wrap(
-                                                      crossAxisAlignment:
-                                                          WrapCrossAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                            size: 20.0,
-                                                            Icons.schedule,
-                                                            color:
-                                                                Color(0xFF008CFF)),
-                                                        SizedBox(
-                                                          width: 3,
-                                                        ),
-                                                        Text(
-                                                          snapshot.data![index]
-                                                              .Departure_Date
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                            fontSize: 15.0,
-                                                            fontFamily: 'DM Sans',
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                VerticalDivider(width: 1.0),
-                                                Expanded(
+                                                          ]),
+                                                    ), //Container
+                                                  ) //Flexible
+                                                ], //<Widget>[]
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                              ),
+                                              Divider(
+                                                height: 20,
+                                                thickness: 1,
+                                                color: Color(0xFF808080),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Expanded(
                                                     child: Center(
                                                       child: Wrap(
                                                         crossAxisAlignment:
-                                                        WrapCrossAlignment.start,
+                                                            WrapCrossAlignment.start,
                                                         children: [
                                                           Icon(
                                                               size: 20.0,
-                                                              Icons.attach_money,
+                                                              Icons.schedule,
                                                               color:
-                                                              Color(0xFF008CFF)),
-                                                          SizedBox(
-                                                            width: 3,
-                                                          ),
+                                                                  Color(0xFF008CFF)),
+
                                                           Text(
                                                             snapshot.data![index]
-                                                                .Ride_Fees
+                                                                .Departure_Date
                                                                 .toString(),
                                                             style: TextStyle(
                                                               fontSize: 15.0,
                                                               fontFamily: 'DM Sans',
                                                               fontWeight:
-                                                              FontWeight.w500,
+                                                                  FontWeight.w500,
                                                             ),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 3,
                                                           ),
                                                         ],
                                                       ),
-                                                )),
-                                              ],
-                                            ),
-                                          ],
+                                                    ),
+                                                  ),
+                                                  VerticalDivider(width: 1.0),
+                                                  Expanded(
+                                                      child: Center(
+                                                        child: Wrap(
+                                                          crossAxisAlignment:
+                                                          WrapCrossAlignment.start,
+                                                          children: [
+                                                            // Icon(
+                                                            //     size: 20.0,
+                                                            //     Icons.attach_money,
+                                                            //     color:
+                                                            //     Color(0xFF008CFF)),
+                                                            Text(
+                                                              snapshot.data![index]
+                                                                  .Ride_Fees
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 15.0,
+                                                                fontFamily: 'DM Sans',
+                                                                fontWeight:
+                                                                FontWeight.w500,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 3,
+                                                            ),
+                                                            Text(
+                                                              "TND",
+                                                              style: TextStyle(
+                                                                color: Color(0xFF008CFF),
+                                                                fontSize: 15.0,
+                                                                fontFamily: 'DM Sans',
+                                                                fontWeight:
+                                                                FontWeight.w500,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                  )),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    )),
+                                      )),
+                                ),
                               ),
                             ),
                           ); //SizedBox

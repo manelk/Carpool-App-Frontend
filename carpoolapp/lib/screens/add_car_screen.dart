@@ -493,11 +493,11 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ElevatedButton(
                     child: Text("Confirm"),
                     onPressed: () {
-                      //CarApi.postCars(brand, model, color, energy_type);
+                      CarApi.postCars(brand, model, color, energy_type);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ShareRideScreen(),
+                          builder: (context) => HomeScreen(),
                         ),
                       );
                     },

@@ -409,22 +409,23 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                       ],
                       keyboardType: TextInputType.number,
                       controller: RideFeesController,
+
                       onChanged: (text) {
                         setState(() {
                           Ride_Fees = text;
                         });
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Ride Fees',
+                        hintText: '0,000',
                         prefixIcon: Icon(Icons.money),
                       )),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     print(Destination + Departure_Location);
-                    // RidesApi.postRide(Destination, Departure_Location,
-                    //     Departure_Date, Departure_Time, Ride_Fees);
+                    RidesApi.postRide(Destination, Departure_Location,
+                        Departure_Date, Departure_Time, Ride_Fees);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -852,15 +853,15 @@ class _ShareRideScreenState extends State<ShareRideScreen> {
                           },
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: 'Ride Fees',
+                            hintText: '0,000',
                             prefixIcon: Icon(Icons.money),
                           )),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         print(Destination + Departure_Location);
-                        // RidesApi.postRide(Destination, Departure_Location,
-                        //     Departure_Date, Departure_Time, Ride_Fees);
+                        RidesApi.postRide(Destination, Departure_Location,
+                            Departure_Date, Departure_Time, Ride_Fees);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

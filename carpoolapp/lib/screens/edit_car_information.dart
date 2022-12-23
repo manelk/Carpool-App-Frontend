@@ -111,19 +111,12 @@ class _EditCarScreenState extends State<EditCarScreen> {
       backgroundColor: Color(0xffF8F8F8),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Edit Your Car Information',
-          style: TextStyle(color: Colors.black),
-        ),
-        leadingWidth: 100,
-        backgroundColor: Color.fromRGBO(248, 248, 248, 1),
-        automaticallyImplyLeading: false,
         leading: ElevatedButton.icon(
           onPressed: () async {
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CarInformationScreen(),
+                builder: (context) => HomeScreen(),
               ),
             );
           },
@@ -134,6 +127,14 @@ class _EditCarScreenState extends State<EditCarScreen> {
             elevation: 0,
           ),
         ),
+        title: const Text(
+          'Edit Your Car Information',
+          style: TextStyle(color: Colors.black),
+        ),
+        leadingWidth: 100,
+        backgroundColor: Color.fromRGBO(248, 248, 248, 1),
+        automaticallyImplyLeading: false,
+
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -319,11 +320,12 @@ class _EditCarScreenState extends State<EditCarScreen> {
                                   print(energy_type);
                                   print(id);
                                   CarApi.editCar(id, brand, color, energy_type);
+                                 // Navigator.pop(context);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          CarInformationScreen(),
+                                          HomeScreen(),
                                     ),
                                   );
                                 },

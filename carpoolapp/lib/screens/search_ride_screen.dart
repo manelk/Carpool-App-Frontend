@@ -197,21 +197,11 @@ class _SearchDepartureScreenState extends State<SearchDepartureScreen> {
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            // var directions = await GoogleApi.getDirections(
-                            //     _originController.text,
-                            //     _destinationController.text);
-                            // _goToPlace(
-                            //   directions['start_location']['lat'],
-                            //   directions['start_location']['lng'],
-                            //   directions['bounds_ne'],
-                            //   directions['bounds_sw'],
-                            // );
-                            // _setPolyline(directions['polyline_decoded']);
-                          //  RidesApi.fetchRidesPerSearch("Tunis", "Mourouj 5");
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AvailableRidesPerSearchScreen(),
+                                builder: (context) =>
+                                    AvailableRidesPerSearchScreen(Destination: _destinationController.text, Departure: _originController.text),
                               ),
                             );
                           },
@@ -225,25 +215,6 @@ class _SearchDepartureScreenState extends State<SearchDepartureScreen> {
                           ),
                           child: const Text("Find a ride"),
                         ),
-                        // IconButton(
-                        //     onPressed: () async {
-                        //       var directions = await GoogleApi.getDirections(
-                        //           _originController.text,
-                        //           _destinationController.text);
-                        //       _goToPlace(
-                        //         directions['start_location']['lat'],
-                        //         directions['start_location']['lng'],
-                        //         directions['bounds_ne'],
-                        //         directions['bounds_sw'],
-                        //       );
-                        //
-                        //       _setPolyline(directions['polyline_decoded']);
-                        //
-                        //       // var place = await GoogleApi.getPlace(
-                        //       //     _controllerDeparture.text);
-                        //       // _goToPlace(place);
-                        //     },
-                        //     icon: Icon(Icons.search)),
                       ],
                     ))
                   ],

@@ -76,6 +76,7 @@ flutter:
     - images/passengercar2.png
     - images/nocarscreen.png
     - images/splash.png
+    - images/emptyWindow.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

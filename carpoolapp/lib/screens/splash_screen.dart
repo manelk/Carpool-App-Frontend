@@ -1,5 +1,6 @@
 import 'package:carpoolapp/main.dart';
 import 'package:carpoolapp/screens/home_screen.dart';
+import 'package:carpoolapp/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class Splash extends StatefulWidget {
@@ -13,7 +14,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-  _naviagtehome();
+      _naviagtehome();
   }
 
   void _naviagtehome() async {
@@ -24,11 +25,8 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-height: double.minPositive,
+      body: Center(
         child: Column(
           children: [
             Padding(
