@@ -1,7 +1,7 @@
 ## Carpool App Front End Details
 
 ### ✍️ General Project Description:
-The carpooling app helps people find affordable rides within a selected region in Tunisia. This software is capable of various functionalities such as: login, sign up, manage rides; find rides or offer rides, consult the map, one to one chat, profile management and rating the driver and ride.
+The carpool app helps people find affordable rides within a selected region in Tunisia. This software is capable of various functionalities such as: login, sign up, manage rides; find rides or offer rides, consult the map, one to one chat, profile management and rating the driver and ride.
 
 ### 👩‍💻 Frontend Technologies:
 Flutter, Dart
